@@ -1,0 +1,1 @@
+0 * * * * cd /pantip_etl_cronjob && /usr/local/bin/python pipeline.py >> cron.log 2>&1
