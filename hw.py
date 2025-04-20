@@ -14,6 +14,7 @@ import locale
 import pandas as pd
 import sqlalchemy as sa
 from urllib.parse import quote
+import pymysql
 
 
 # In[ ]:
