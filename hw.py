@@ -11,6 +11,9 @@ import pandas as pd
 from time import sleep
 from datetime import datetime
 import locale
+import pandas as pd
+import sqlalchemy as sa
+from urllib.parse import quote
 
 
 # In[ ]:
@@ -101,6 +104,25 @@ df = pd.DataFrame({
 "date": dt_lst, "url": urls
 })
 
+DIALECT = "mysql"
+SQL_DRIVER = "pymysql"
+USERNAME = "user_de"
+PASSWORD = "P@ssw0rd"
+HOST = "202.44.12.115"
+PORT = 3306
+DBNAME = "DE_Int1"
+
+conn_str = DIALECT + '+' + SQL_DRIVER + '://' + USERNAME + ':' + quote(PASSWORD) +'@' + HOST + ':' + str(PORT) + '/' + DBNAME
+
+engine = sa.create_engine(conn_str,     pool_size=10,  # Adjust pool size
+    pool_recycle=3600,  # Recycle connections after 1 hour
+    pool_timeout=30, #adjust timeout
+)
+conn = engine.connect()
+
+df.to_sql("pantip_etl_data_DE21", conn, index=False, if_exists="replace")
+
+conn.close()
 
 
 # In[ ]:
