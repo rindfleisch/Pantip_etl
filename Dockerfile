@@ -5,6 +5,11 @@ WORKDIR /pantip_etl_cronjob
 # Add your source code
 ADD . /pantip_etl_cronjob
 
+# --- Timezone and Locale Setup ---
+# [Optional but Recommended] Set timezone (adjust if needed)
+ENV TZ=Asia/Bangkok
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 # Install dependencies and Chromium
 RUN apt-get update && apt-get install -y \
     wget \
@@ -28,10 +33,24 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     gcc \
     chromium \
-    && rm -rf /var/lib/apt/lists/*
+    locales `# <-- Add locales package here` \
+    && \
+    # Configure and generate the Thai locale
+    echo "--> Configuring locale: th_TH.UTF-8" && \
+    sed -i -e 's/# th_TH.UTF-8 UTF-8/th_TH.UTF-8 UTF-8/' /etc/locale.gen && \
+    echo "--> Generating locales..." && \
+    dpkg-reconfigure --frontend=noninteractive locales && \
+    # Clean up apt cache
+    echo "--> Cleaning up apt cache" && \
+    rm -rf /var/lib/apt/lists/*
 
+# Set Environment Variables for the Locale using recommended format
+ENV LANG=th_TH.UTF-8
+ENV LANGUAGE=th_TH:en
+ENV LC_ALL=th_TH.UTF-8
 # Download and install ChromeDriver
 ENV CHROME_DRIVER_VERSION=135.0.7049.95
+
 
 RUN wget -O /tmp/chromedriver.zip "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/${CHROME_DRIVER_VERSION}/linux64/chromedriver-linux64.zip" && \
     unzip /tmp/chromedriver.zip -d /tmp/ && \
