@@ -26,21 +26,9 @@ RUN apt-get update && apt-get install -y \
     cron\
     libpq-dev\
     gcc\
+    chromium chromium-driver \ 
     && rm -rf /var/lib/apt/lists/*
 
-
-
-# Install Chrome v123
-RUN wget -q https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_123.0.6312.122-1_amd64.deb && \
-    apt-get update && \
-    apt-get install -y ./google-chrome-stable_123.0.6312.122-1_amd64.deb && \
-    rm google-chrome-stable_123.0.6312.122-1_amd64.deb
-
-# Install matching Chromedriver
-RUN CHROME_DRIVER_VERSION=123.0.6312.122 && \
-    wget -O /tmp/chromedriver.zip "https://chromedriver.storage.googleapis.com/${CHROME_DRIVER_VERSION}/chromedriver_linux64.zip" && \
-    unzip /tmp/chromedriver.zip -d /usr/local/bin/ && \
-    chmod +x /usr/local/bin/chromedriver
 
 
 COPY crontab /etc/cron.d/crontab
