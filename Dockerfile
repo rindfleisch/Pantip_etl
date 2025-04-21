@@ -23,9 +23,12 @@ RUN apt-get update && apt-get install -y \
     fonts-liberation \
     libu2f-udev \
     libvulkan1 \
+    cron\
+    libpq-dev\
+    gcc\
     && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get install -y cron libpq-dev gcc 
+
 
 # Install Google Chrome
 RUN curl -sSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /etc/apt/trusted.gpg.d/google.gpg \
