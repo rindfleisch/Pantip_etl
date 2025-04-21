@@ -6,6 +6,7 @@
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
 import numpy as np
 import pandas as pd
 from time import sleep
@@ -19,8 +20,11 @@ import pymysql
 
 # In[ ]:
 
-
-options = webdriver.ChromeOptions()
+options = Options()
+#options.add_argument('--headless')  # Optional
+options.add_argument('--no-sandbox')
+options.add_argument('--disable-dev-shm-usage')
+#options = webdriver.ChromeOptions()
 options.add_argument("--headless=new")
 driver = webdriver.Chrome(options = options)
 
